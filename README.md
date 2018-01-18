@@ -256,15 +256,24 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
     `-bash-4.2$ vim pg_hba.conf`
 
     ` *pg_hba.conf vi editor*`
-    `*IPv4 local connections:*`
-    `host    all             all             0.0.0.0/0               md5`
-    `-# Allow replication connections from localhost, by a user with the`
-    `-# replication privilege.`
-    `-#local   replication     postgres                                trust`
-    `-#host    replication     postgres        127.0.0.1/32            trust`
-    `-#host    replication     postgres        ::1/128                 trust`
-    `host     replication     postgresuser    0.0.0.0/0               md5`
-    ` *pg_hba.conf vi editor*`
+    
+	`*IPv4 local connections:*`
+    
+	`host    all             all             0.0.0.0/0               md5`
+    
+	`-# Allow replication connections from localhost, by a user with the`
+    
+	`-# replication privilege.`
+    
+	`-#local   replication     postgres                                trust`
+    
+	`-#host    replication     postgres        127.0.0.1/32            trust`
+    
+	`-#host    replication     postgres        ::1/128                 trust`
+    
+	`host     replication     postgresuser    0.0.0.0/0               md5`
+    
+	` *pg_hba.conf vi editor*`
     
 
 15. open ***postgresql.conf*** config file and change it as follows
@@ -272,13 +281,20 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
     `-bash-4.2$ vim postgresql.conf`
 
     `------ postgresql.conf vi editor ------`
-    `listen_addresses = '*'`
-    `port = 5432`
-    `ssl = off`
-    `wal_level = logical`
-    `max_wal_senders = 1`
-    `max_replication_slots = 1 `
-    `------ postgresql.conf vi editor ------`
+    
+	`listen_addresses = '*'`
+    
+	`port = 5432`
+    
+	`ssl = off`
+    
+	`wal_level = logical`
+    
+	`max_wal_senders = 1`
+    
+	`max_replication_slots = 1 `
+    
+	`------ postgresql.conf vi editor ------`
 
 
 16. Restart the server to apply changes
@@ -306,10 +322,14 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
     `[ec2-user@hostname ~] $ visudo`
 
     `> ------* visudo editor for sudo ------***`
-    `> -# Open wheel line`
-    `> -## Allows people in group wheel to run all commands`
-    `> %wheel        ALL=(ALL)       ALL`
-    `> ------* visudo ------***`
+    
+	`> -# Open wheel line`
+    
+	`> -## Allows people in group wheel to run all commands`
+    
+	`> %wheel        ALL=(ALL)       ALL`
+    
+	`> ------* visudo ------***`
 
 21. Find postgres development tools to ***compile wal2json plugin***
 
