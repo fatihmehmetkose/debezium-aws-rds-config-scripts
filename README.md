@@ -58,11 +58,13 @@ Before we go;
     
 ![m'lady](./images/AWS-RDS-Postgres-DB-Parameter-Group.png) 
 	
-	`rds.logical_replication = 1`
-
-    `shared_preload_libraries = pg_stat_statements,pg_hint_plan,pgaudit`
-
-    `ssl=0`
+	
+[listing,indent=0,options="nowrap"]
+----
+	rds.logical_replication = 1
+    shared_preload_libraries = pg_stat_statements,pg_hint_plan,pgaudit
+    ssl=0
+----
 
 * 3 - Create a new AWS RDS PostgreSQL DB called testdbserver. Set the user name as ***testdbuser***. 
 Give permission to Port Number ***TCP:5432*** to all sources (0.0.0.0/0) via ***DB Security Group***.
@@ -71,7 +73,10 @@ Give permission to Port Number ***TCP:5432*** to all sources (0.0.0.0/0) via ***
 
 4. Connect to the database via psql 
 
-    `[ec2-user@hostname ~] $ psql -h testdbserver.cuwbhrbzgqk9.us-east-1.rds.amazonaws.com -d testdb -U testdbuser -p 5432`
+[source,bash,indent=0]
+----
+    [ec2-user@hostname ~] $ psql -h testdbserver.cuwbhrbzgqk9.us-east-1.rds.amazonaws.com -d testdb -U testdbuser -p 5432
+----
 
 5. Type \d to see a screen like that and be sure that  your user testdbuser is a member of rds_superuser and rds_superuser has ***rds_replication*** right
 
