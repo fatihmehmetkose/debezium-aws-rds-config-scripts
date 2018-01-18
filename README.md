@@ -54,7 +54,7 @@ Before we go;
 
 1. Create a new "Parameter Group" at AWS RDS ***Parameter groups*** section and give it a name , for example, "postgres-db-parameter-groups"
 
-2. Be sure to set the new Parameter Group parameters as follows:
+2. Be sure to set the new ***Parameter Group*** parameters as follows:
     
 ![m'lady](./images/AWS-RDS-Postgres-DB-Parameter-Group.png) 
 	
@@ -64,8 +64,8 @@ Before we go;
 
     `ssl=0`
 
-* 3 - Create a new AWS RDS PostgreSQL DB called testdbserver. Set the user name as "testdbuser". 
-Give permission to Port Number TCP:5432 to all sources (0.0.0.0/0) via DB Security Group
+* 3 - Create a new AWS RDS PostgreSQL DB called testdbserver. Set the user name as ***testdbuser***. 
+Give permission to Port Number ***TCP:5432*** to all sources (0.0.0.0/0) via ***DB Security Group***.
 
 ![m'lady](./images/AWS-Security-Group-permission.png) 
 
@@ -73,7 +73,7 @@ Give permission to Port Number TCP:5432 to all sources (0.0.0.0/0) via DB Securi
 
     `[ec2-user@hostname ~] $ psql -h testdbserver.cuwbhrbzgqk9.us-east-1.rds.amazonaws.com -d testdb -U testdbuser -p 5432`
 
-5. Type \d to see a screen like that and be sure that  your user testdbuser is a member of rds_superuser and rds_superuser has "rds_replication" right
+5. Type \d to see a screen like that and be sure that  your user testdbuser is a member of rds_superuser and rds_superuser has ***rds_replication*** right
 
     `testdb=> \du`
     `                                                   List of roles`
@@ -92,7 +92,7 @@ Give permission to Port Number TCP:5432 to all sources (0.0.0.0/0) via DB Securi
 
     `testdb=> select * from pg_replication_slots;`
 
-7. reate a replication plugin called wal2json and name  i wal2json_rds
+7. Create a replication plugin called ***wal2json*** and name it ***wal2json_rds***
 
     `testdb=> SELECT * FROM pg_create_logical_replication_slot('wal2json_rds', 'wal2json');`
 
@@ -100,15 +100,15 @@ Give permission to Port Number TCP:5432 to all sources (0.0.0.0/0) via DB Securi
     
     `testdb=> SELECT pg_drop_replication_slot('wal2json_rds');`
 
-9. Create a table named customers
+9. Create a table named ***customers***
 
     `testdb=> CREATE TABLE customers (id SERIAL,  first_name VARCHAR(255) NOT NULL,  last_name VARCHAR(255) NOT NULL,  email VARCHAR(255) NOT NULL,  PRIMARY KEY(id));`
 
-10. Change table so that it can support replication
+10. Change table so that it can ***support replication***
 
     `testdb=> ALTER TABLE customers REPLICA IDENTITY FULL;`
 
-11. Insert some records into the source table
+11. ***Insert some records*** into the source table
 
     `testdb=> insert into customers values(default, 'fatih1', 'kose1', 'fatih1.kose@example.com');`
 
@@ -120,7 +120,7 @@ Give permission to Port Number TCP:5432 to all sources (0.0.0.0/0) via DB Securi
 
     `[ec2-user@hostname ~] $ mkdir ~/debezium`
 
-2. Download the sample config scripts and copy them into that directory
+2. Download the sample config scripts from ***https://github.com/fatihmehmetkose/debezium-aws-rds-config-scripts*** and copy them into that directory
 
     `[ec2-user@hostname ~] $ cp *.zip debezium/`
 
@@ -128,35 +128,35 @@ Give permission to Port Number TCP:5432 to all sources (0.0.0.0/0) via DB Securi
 
     `[ec2-user@hostname ~] $ cd debezium`
 
-4. export DEBEZIUM_VERSION environment variable
+4. ***export DEBEZIUM_VERSION*** environment variable
 
     `[ec2-user@hostname ~] $ export DEBEZIUM_VERSION=0.7.1`
 
-5. Build docker-compose files named docker-compose.yaml (default name)
+5. ***Build docker-compose files*** named docker-compose.yaml (default name)
 
     `[ec2-user@hostname ~] $ docker-compose build`
 
-6. Start the docker containers. Applications running on containers are Zookeper, Apache Kafka, Debezium Kafka Connector, PostgreSQL db) 
+6. ***Start the docker*** containers. Applications running on containers are ***Zookeper, Apache Kafka, Debezium Kafka Connector, PostgreSQL db***. 
 
     `[ec2-user@hostname ~] $ docker-compose up`
 
-7. Create a table named "customers" on target PostgreSQL db
+7. Create a table named ***customers*** on target or sink PostgreSQL db
 
     `[ec2-user@hostname ~] $ docker-compose -f docker-compose.yaml exec postgres bash -c 'psql -U $POSTGRES_USER $POSTGRES_DB -c "CREATE TABLE customers (id SERIAL,  first_name VARCHAR(255) NOT NULL,  last_name VARCHAR(255) NOT NULL,  email VARCHAR(255) NOT NULL,  PRIMARY KEY(id));"'`
 
-8. Start target PostgreSQL DB connector running in a container
+8. ***Start target PostgreSQL DB connector*** running in a container
 
     `[ec2-user@hostname ~] $ curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @jdbc-sink.json`
 
-9. Start source AWS RDS PostgreSQL DB connector
+9. ***Start source AWS RDS PostgreSQL DB connector***
 
     `[ec2-user@hostname ~] $ curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @source-postgres.json`
 
-10. Verify that the connector definitions are added to the debezium connector
+10. ***Verify*** that the connector definitions are added to the debezium connector
     
 	`[ec2-user@hostname ~] $ curl -H "Accept:application/json" localhost:8083/connectors/`
 
-11. Verify that the PostgreSQL database has the same content as in AWS RDS PostgreSQL DB:
+11. ***Verify*** that the PostgreSQL database has the same content as in AWS RDS PostgreSQL DB:
 
     `[ec2-user@hostname ~] $ docker-compose -f docker-compose.yaml exec postgres bash -c 'psql -U $POSTGRES_USER $POSTGRES_DB -c "select * from customers"'`
 
@@ -168,7 +168,7 @@ Give permission to Port Number TCP:5432 to all sources (0.0.0.0/0) via DB Securi
 
     `[ec2-user@hostname ~] $ docker exec -it f86dfa1bba34 bash`
 
-14. Optionally, if you wanna restart the servers, press Ctrl +C and run the following command again
+14. Optionally, if you wanna ***restart the servers***, press ***Ctrl +C*** and run the following command again
 
     `[ec2-user@hostname ~] $ export DEBEZIUM_VERSION=0.7.1`
 
@@ -180,7 +180,7 @@ Give permission to Port Number TCP:5432 to all sources (0.0.0.0/0) via DB Securi
 
 Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-relational-databases-on-centos-7/
 
-1. Install PostgreSQL 9.6.5
+1. Install ***PostgreSQL 9.6.5***
 
     `[ec2-user@hostname ~] $ sudo yum update`
 
@@ -194,11 +194,11 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
 
     `[ec2-user@hostname ~] $ sudo yum install postgresql96-server postgresql96-contrib`
 
-2. Login as postgres linux user. 
+2. Login as postgres ***linux user***. 
 
     `[ec2-user@hostname ~] $ sudo -i -u postgres`
 
-3. Start PostgreSQL DB server
+3. ***Start PostgreSQL DB server***
 
     `[ec2-user@hostname ~] $ /usr/lib64/pgsql96/bin/initdb -D /var/lib/pgsql96/data`
 
@@ -211,19 +211,19 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
 
     `[ec2-user@hostname ~] $ /usr/lib64/pgsql96/bin/pg_ctl restart -D /var/lib/pgsql96/data`
 
-6. Set password for postgres linux user
+6. ***Set password for postgres linux user***
 
     `[ec2-user@hostname ~] $ sudo passwd postgres`
 
-7. Set password for postgres db user
+7. ***Set password for postgres db user***
     
 	`-bash-4.2$ psql -d template1 -c "ALTER USER postgres WITH PASSWORD 'postgres';"`
 
-8. Create a user named "postgresuser"
+8. Create a user named ***postgresuser***
 
     `-bash-4.2$ createuser postgresuser`
 
-9. Create a db named "inventory"
+9. Create a db named ***inventory***
 
     `-bash-4.2$ $ createdb inventory -O postgresuser`
 
@@ -231,7 +231,7 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
  
      `-bash-4.2$ psql -d inventory -c "ALTER USER postgresuser WITH PASSWORD 'postgrespw';"`
 
-11. Connect to inventory db
+11. ***Connect*** to inventory db
 
     `-bash-4.2$ psql inventory`
  
@@ -251,7 +251,7 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
 
     `-bash-4.2$ cd /var/lib/pgsql96/data/`
 
-14. open "pg_hba.conf" config file and change it as follows
+14. open ***pg_hba.conf*** config file and change it as follows
 
     `-bash-4.2$ vim pg_hba.conf`
 
@@ -267,7 +267,7 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
     ` *pg_hba.conf vi editor*`
     
 
-15. open "postgresql.conf" config file and change it as follows
+15. open ***postgresql.conf*** config file and change it as follows
 
     `-bash-4.2$ vim postgresql.conf`
 
@@ -289,19 +289,19 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
 
     `-bash-4.2$ psql -d inventory -U postgresuser`
 
-18. Give REPLICATION and SUPERUSER(not mandatory) rights to the new user.
+18. Give ***REPLICATION*** and ***SUPERUSER***(not mandatory) rights to the new user.
 
     `testdb=> ALTER ROLE postgresuser WITH SUPERUSER;`
 
     `testdb=> ALTER ROLE postgresuser WITH REPLICATION;`
 
-19. Add your user postgres to the sudoers group
+19. Add your user postgres to the ***sudoers*** group
 
     `[ec2-user@hostname ~] $ usermod -aG wheel postgres`
 
     `[ec2-user@hostname ~] $ cat /etc/sudoers`
 
-20. Allow wheel user group to run all commands on linux
+20. Allow wheel user group to run all commands on linux via ***visudo*** command
 
     `[ec2-user@hostname ~] $ visudo`
 
@@ -311,7 +311,7 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
     `> %wheel        ALL=(ALL)       ALL`
     `> ------* visudo ------***`
 
-21. Find postgres development tools to compile wal2json plugin`
+21. Find postgres development tools to ***compile wal2json plugin***
 
     `[ec2-user@hostname ~] $ yum list postgres*`
 
@@ -321,7 +321,7 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
 
     `[ec2-user@hostname ~] $ sudo yum install gcc.noarch`
 
-22. Install git tool to download wal2json plugin code from the repository below.
+22. Install git tool to ***download wal2json plugin code*** from the repository below.
 
     `[ec2-user@hostname ~] $ sudo yum install git`
 
@@ -329,7 +329,7 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
 
     `-bash-4.2$ git clone https://github.com/eulerto/wal2json.git`
 
-23. Compile wal2json plugin
+23. ***Compile wal2json plugin***
 
     `-bash-4.2$ cd wal2json/`
 
@@ -342,7 +342,7 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
     > The same thing with (USE_PGXS=1 make install )
 
 
-24. Create a replication slot named "wal2json_rds" using the plugin "wal2json".
+24. ***Create a replication slot*** named ***wal2json_rds*** using the plugin ***wal2json***.
 
     `-bash-4.2$ psql inventory -U postgresuser`
 
@@ -350,7 +350,7 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
 
     `testdb=> SELECT * FROM pg_replication_slots;`
 
-25. Check out your wal_level, you must see "logical"
+25. Check out your ***wal_level***, you must see ***logical***
 
     `testdb=> show wal_level;`
 
