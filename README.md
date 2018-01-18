@@ -284,15 +284,17 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
 
 18. Give ***REPLICATION*** and ***SUPERUSER***(not mandatory) rights to the new user.
 
-    `testdb=> ALTER ROLE postgresuser WITH SUPERUSER;`
-
-    `testdb=> ALTER ROLE postgresuser WITH REPLICATION;`
+----
+    testdb=> ALTER ROLE postgresuser WITH SUPERUSER;
+    testdb=> ALTER ROLE postgresuser WITH REPLICATION;
+----
 
 19. Add your user postgres to the ***sudoers*** group
 
-    `[ec2-user@hostname ~] $ usermod -aG wheel postgres`
-
-    `[ec2-user@hostname ~] $ cat /etc/sudoers`
+----
+    [ec2-user@hostname ~] $ usermod -aG wheel postgres
+    [ec2-user@hostname ~] $ cat /etc/sudoers
+----
 
 20. Allow wheel user group to run all commands on linux via ***visudo*** command
 
