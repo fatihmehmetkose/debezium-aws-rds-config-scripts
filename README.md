@@ -353,3 +353,10 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
 25. Check out your wal_level, you must see "logical"
 
     `testdb=> show wal_level;`
+
+---
+## RESULT
+
+** As you can see, the records inserted from AWS RDS PostgreSQL DB are replicated to the target PostgreSQL DB.**
+
+![m'lady](./images/Result.png) 
