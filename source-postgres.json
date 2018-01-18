@@ -1,0 +1,24 @@
+{
+  "name": "customer-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "moneratestserverwithnoreplica2.cuwbhrbzgqk9.us-east-1.rds.amazonaws.com",
+    "database.port": "5432",
+    "database.user": "dbuser",
+    "database.password": "Test2017",
+    "database.dbname" : "testdb",
+    "plugin.name": "wal2json",	
+    "slot.name": "wal2json_rds",	
+    "snapshot.mode": "always",
+    "database.server.name": "dbserver1",
+    "database.history.kafka.bootstrap.servers": "kafka:9092",
+    "database.history.kafka.topic": "customers",
+    "table.whitelist": "public.customers", 
+    "transforms": "route",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
+    "transforms.route.replacement": "$3"
+  }
+}
+
+
