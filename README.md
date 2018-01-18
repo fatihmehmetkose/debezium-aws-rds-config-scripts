@@ -76,16 +76,26 @@ Give permission to Port Number ***TCP:5432*** to all sources (0.0.0.0/0) via ***
 5. Type \d to see a screen like that and be sure that  your user testdbuser is a member of rds_superuser and rds_superuser has ***rds_replication*** right
 
     `testdb=> \du`
-    `                                                   List of roles`
-    `    Role name    |                         Attributes                         |              Member of`
-    `-----------------+----------------------------------------------------------+------------------------------------`
-    ` testdbuser    | Create role, Create DB                                    +| {rds_superuser}`
-    `                 | Password valid until infinity                              |`
-    ` rds_replication | Cannot login                                               | {}`
-    ` rds_superuser   | Cannot login                                               | {rds_replication,pg_signal_backend}`
-    ` rdsadmin        | Superuser, Create role, Create DB, Replication, Bypass RLS+| {}`
-    `                 | Password valid until infinity                              |`
-    ` rdsrepladmin    | No inheritance, Cannot login, Replication                  | {}`
+    
+	`                                                   List of roles`
+    
+	`    Role name    |                         Attributes                         |              Member of`
+    
+	`-----------------+----------------------------------------------------------+------------------------------------`
+    
+	` testdbuser    | Create role, Create DB                                    +| {rds_superuser}`
+    
+	`                 | Password valid until infinity                              |`
+    
+	` rds_replication | Cannot login                                               | {}`
+    
+	` rds_superuser   | Cannot login                                               | {rds_replication,pg_signal_backend}`
+    
+	` rdsadmin        | Superuser, Create role, Create DB, Replication, Bypass RLS+| {}`
+    
+	`                 | Password valid until infinity                              |`
+    
+	` rdsrepladmin    | No inheritance, Cannot login, Replication                  | {}`
 
 
 6. Display if any replication slots are available
