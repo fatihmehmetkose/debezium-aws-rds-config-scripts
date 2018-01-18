@@ -59,7 +59,6 @@ Before we go;
 ![m'lady](./images/AWS-RDS-Postgres-DB-Parameter-Group.png) 
 	
 	
-[listing,indent=0,options="nowrap"]
 ----
 	rds.logical_replication = 1
     shared_preload_libraries = pg_stat_statements,pg_hint_plan,pgaudit
@@ -73,7 +72,6 @@ Give permission to Port Number ***TCP:5432*** to all sources (0.0.0.0/0) via ***
 
 4. Connect to the database via psql 
 
-[source,bash,indent=0]
 ----
     [ec2-user@hostname ~] $ psql -h testdbserver.cuwbhrbzgqk9.us-east-1.rds.amazonaws.com -d testdb -U testdbuser -p 5432
 ----
@@ -107,9 +105,10 @@ Give permission to Port Number ***TCP:5432*** to all sources (0.0.0.0/0) via ***
 
 11. ***Insert some records*** into the source table
 
-    `testdb=> insert into customers values(default, 'fatih1', 'kose1', 'fatih1.kose@example.com');`
-
-    `testdb=> insert into customers values(default, 'fatih2', 'kose2', 'fatih1.kose@example.com');`
+----
+    testdb=> insert into customers values(default, 'fatih1', 'kose1', 'fatih1.kose@example.com');
+    testdb=> insert into customers values(default, 'fatih2', 'kose2', 'fatih1.kose@example.com');
+----
 
 ### 1.3 Prepare Debezium Test Environment And Complete Configuration On Linux
 
@@ -167,11 +166,11 @@ Give permission to Port Number ***TCP:5432*** to all sources (0.0.0.0/0) via ***
 
 14. Optionally, if you wanna ***restart the servers***, press ***Ctrl +C*** and run the following command again
 
-    `[ec2-user@hostname ~] $ export DEBEZIUM_VERSION=0.7.1`
-
-    `[ec2-user@hostname ~] $ docker-compose down`
-
-    `[ec2-user@hostname ~] $ docker-compose up`
+----
+    [ec2-user@hostname ~] $ export DEBEZIUM_VERSION=0.7.1
+    [ec2-user@hostname ~] $ docker-compose down
+    [ec2-user@hostname ~] $ docker-compose up
+----
 
 ### 1.4 Prepare Postgresql Standalone Db Environment As A Source And Target(Sink) At The Same Time For Debezium Connector On Linux
 
@@ -179,17 +178,14 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
 
 1. Install ***PostgreSQL 9.6.5***
 
-    `[ec2-user@hostname ~] $ sudo yum update`
-
-    `[ec2-user@hostname ~] $ cd ~`
-
-    `[ec2-user@hostname ~] $ wget https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-5.noarch.rpm`
-
-    `[ec2-user@hostname ~] $ sudo yum install pgdg-centos96-9.6-5.noarch.rpm epel-release`
-
-    `[ec2-user@hostname ~] $ sudo yum update`
-
-    `[ec2-user@hostname ~] $ sudo yum install postgresql96-server postgresql96-contrib`
+----
+    [ec2-user@hostname ~] $ sudo yum update
+    [ec2-user@hostname ~] $ cd ~
+    [ec2-user@hostname ~] $ wget https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-5.noarch.rpm
+    [ec2-user@hostname ~] $ sudo yum install pgdg-centos96-9.6-5.noarch.rpm epel-release
+    [ec2-user@hostname ~] $ sudo yum update
+    [ec2-user@hostname ~] $ sudo yum install postgresql96-server postgresql96-contrib
+----
 
 2. Login as postgres ***linux user***. 
 
@@ -234,15 +230,14 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
  
 12. Some useful commands
 
+----
     `testdb=> \l'
-
-    `\l : list all databases`
-
-    `\h : list all command`
-
-    `\du : show user roles`
-
-    `\c : show connection info`
+		
+		\l : list all databases
+		\h : list all command
+		\du : show user roles
+		\c : show connection info
+----
 
 13. Go to db folder
 
@@ -250,48 +245,33 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
 
 14. open ***pg_hba.conf*** config file and change it as follows
 
-    `-bash-4.2$ vim pg_hba.conf`
-
-    ` *pg_hba.conf vi editor*`
-    
-	`*IPv4 local connections:*`
-    
-	`host    all             all             0.0.0.0/0               md5`
-    
-	`-# Allow replication connections from localhost, by a user with the`
-    
-	`-# replication privilege.`
-    
-	`-#local   replication     postgres                                trust`
-    
-	`-#host    replication     postgres        127.0.0.1/32            trust`
-    
-	`-#host    replication     postgres        ::1/128                 trust`
-    
-	`host     replication     postgresuser    0.0.0.0/0               md5`
-    
-	` *pg_hba.conf vi editor*`
+----
+    -bash-4.2$ vim pg_hba.conf`
+    *pg_hba.conf vi editor*`
+	*IPv4 local connections:*`
+	host    all             all             0.0.0.0/0               md5
+	-# Allow replication connections from localhost, by a user with the
+	-# replication privilege.
+	-#local   replication     postgres                                trust
+	-#host    replication     postgres        127.0.0.1/32            trust
+	-#host    replication     postgres        ::1/128                 trust
+	host     replication     postgresuser    0.0.0.0/0               md5
+	*pg_hba.conf vi editor*
     
 
 15. open ***postgresql.conf*** config file and change it as follows
 
-    `-bash-4.2$ vim postgresql.conf`
-
-    `------ postgresql.conf vi editor ------`
-    
-	`listen_addresses = '*'`
-    
-	`port = 5432`
-    
-	`ssl = off`
-    
-	`wal_level = logical`
-    
-	`max_wal_senders = 1`
-    
-	`max_replication_slots = 1 `
-    
-	`------ postgresql.conf vi editor ------`
+----
+    -bash-4.2$ vim postgresql.conf
+    ------ postgresql.conf vi editor ------
+	listen_addresses = '*'
+	port = 5432
+	ssl = off
+	wal_level = logical
+	max_wal_senders = 1
+	max_replication_slots = 1
+	------ postgresql.conf vi editor ------
+----
 
 
 16. Restart the server to apply changes
@@ -316,56 +296,50 @@ Ref : https://linode.com/docs/databases/postgresql/how-to-install-postgresql-rel
 
 20. Allow wheel user group to run all commands on linux via ***visudo*** command
 
-    `[ec2-user@hostname ~] $ visudo`
-
-    `> ------* visudo editor for sudo ------***`
-    
-	`> -# Open wheel line`
-    
-	`> -## Allows people in group wheel to run all commands`
-    
-	`> %wheel        ALL=(ALL)       ALL`
-    
-	`> ------* visudo ------***`
+----
+    [ec2-user@hostname ~] $ visudo`
+    ------* visudo editor for sudo ------***`
+	 -# Open wheel line`
+	 -## Allows people in group wheel to run all commands`
+	 %wheel        ALL=(ALL)       ALL`
+	------* visudo ------***
+----
 
 21. Find postgres development tools to ***compile wal2json plugin***
 
-    `[ec2-user@hostname ~] $ yum list postgres*`
-
-    `[ec2-user@hostname ~] $ sudo yum install postgresql96-devel.x86_64`
-
-    `[ec2-user@hostname ~] $ yum list gcc*`
-
-    `[ec2-user@hostname ~] $ sudo yum install gcc.noarch`
+----
+    [ec2-user@hostname ~] $ yum list postgres*
+    [ec2-user@hostname ~] $ sudo yum install postgresql96-devel.x86_64
+    [ec2-user@hostname ~] $ yum list gcc*
+    [ec2-user@hostname ~] $ sudo yum install gcc.noarch
+----
 
 22. Install git tool to ***download wal2json plugin code*** from the repository below.
 
-    `[ec2-user@hostname ~] $ sudo yum install git`
-
-    `[ec2-user@hostname ~] $ sudo -i -u postgres`
-
-    `-bash-4.2$ git clone https://github.com/eulerto/wal2json.git`
+----
+    [ec2-user@hostname ~] $ sudo yum install git
+    [ec2-user@hostname ~] $ sudo -i -u postgres
+    -bash-4.2$ git clone https://github.com/eulerto/wal2json.git
+----
 
 23. ***Compile wal2json plugin***
 
-    `-bash-4.2$ cd wal2json/`
-
-    `-bash-4.2$ PATH=/path/to/bin/pg_config:$PATH`
-
-    `-bash-4.2$ USE_PGXS=1 make`
-
-    `-bash-4.2$ sudo /usr/bin/install -c -m 755  wal2json.so '/usr/lib64/pgsql96/'`
-
+----
+    -bash-4.2$ cd wal2json/
+    -bash-4.2$ PATH=/path/to/bin/pg_config:$PATH
+    -bash-4.2$ USE_PGXS=1 make
+    -bash-4.2$ sudo /usr/bin/install -c -m 755  wal2json.so '/usr/lib64/pgsql96/'
     > The same thing with (USE_PGXS=1 make install )
+----
 
 
 24. ***Create a replication slot*** named ***wal2json_rds*** using the plugin ***wal2json***.
 
-    `-bash-4.2$ psql inventory -U postgresuser`
-
-    `testdb=> SELECT * FROM pg_create_logical_replication_slot('wal2json_rds', 'wal2json');`
-
-    `testdb=> SELECT * FROM pg_replication_slots;`
+----
+    -bash-4.2$ psql inventory -U postgresuser
+    testdb=> SELECT * FROM pg_create_logical_replication_slot('wal2json_rds', 'wal2json');
+    testdb=> SELECT * FROM pg_replication_slots;
+----
 
 25. Check out your ***wal_level***, you must see ***logical***
 
