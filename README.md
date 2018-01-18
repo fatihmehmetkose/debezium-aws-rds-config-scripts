@@ -77,26 +77,8 @@ Give permission to Port Number ***TCP:5432*** to all sources (0.0.0.0/0) via ***
 
     `testdb=> \du`
     
-	`                                                   List of roles`
-    
-	`    Role name    |                         Attributes                         |              Member of`
-    
-	`-----------------+----------------------------------------------------------+------------------------------------`
-    
-	` testdbuser    | Create role, Create DB                                    +| {rds_superuser}`
-    
-	`                 | Password valid until infinity                              |`
-    
-	` rds_replication | Cannot login                                               | {}`
-    
-	` rds_superuser   | Cannot login                                               | {rds_replication,pg_signal_backend}`
-    
-	` rdsadmin        | Superuser, Create role, Create DB, Replication, Bypass RLS+| {}`
-    
-	`                 | Password valid until infinity                              |`
-    
-	` rdsrepladmin    | No inheritance, Cannot login, Replication                  | {}`
-
+	![m'lady](./images/Replication-RDS.png) 
+	
 
 6. Display if any replication slots are available
 
